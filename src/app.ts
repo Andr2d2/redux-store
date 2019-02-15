@@ -7,7 +7,7 @@ const destroy = document.querySelector('.unsubscribe') as HTMLButtonElement;
 const todoList = document.querySelector('.todos') as HTMLLIElement;
 
 const store = new fromStore.Store({}, {
-  todo: [
+  todos: [
     { label: 'Hello world', complete: false}
   ]
 });
@@ -19,7 +19,10 @@ button.addEventListener(
 
     const payload = { label: input.value, complete: false };
 
-    console.log(payload);
+    store.dispatch({
+      type: 'ADD_TODO',
+      payload: payload // ou apenas payload, pq a propriedade tem o mesmo nome do valor
+    });
 
     input.value = '';
   },
