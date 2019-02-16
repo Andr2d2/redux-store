@@ -4,7 +4,18 @@ export class Store {
     private _state: { [key: string]: any };
 
     constructor(reducers = {}, initialState = {}) {
-        this._state = initialState;
+        this._reducers = reducers;
+        this._state = this._reduce(initialState, {});
+    }
+
+    private _reduce(state, action){
+        const newState = {};
+
+        for (const prop in this._reducers) {
+            newState[prop] = this._reducers[prop](state[prop], action);
+        }
+
+        return newState;
     }
 
     get value() {
@@ -12,11 +23,6 @@ export class Store {
     }
 
     dispatch(action) {
-        this._state = {
-            ...this._state,
-            todos: [ ...this._state.todos, action.payload]
-        }
-
-        console.log(this._state);
+        this._state = this._reduce(this._state, action);
     }
 }
